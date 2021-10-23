@@ -65,7 +65,11 @@ skk.pencolor("white")
 skk.width(4)
 skk.pendown()
 skk.hideturtle()
+
+wn.tracer(100)
 # wn.onscreenclick(fun=cambiar_velocidad)
+
+skk.color()
 
 wn.setup(width=.8, height=.8)
 for simbolo in cadena:
