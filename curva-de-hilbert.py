@@ -1,8 +1,6 @@
-# from typing_extensions import Required
 import click
 import turtle
 from random import randrange
-
 from click.types import INT, STRING, IntParamType, IntRange
 
 colores = [
@@ -59,6 +57,7 @@ def procesarCadena(cadena):
 
     return resultado
 
+# Dibuja en pantalla la cadena resultante
 def dibujar(cadena, tortuga, segmento, angulo):
     for simbolo in cadena:
         if simbolo == 'F':
@@ -81,29 +80,100 @@ def cambiar_colores():
     ventana = turtle.Screen()
     tortuga = ventana.turtles()[0]
     
-    tortuga.color(colores[randrange(3, len(colores))])
+    tortuga.color(colores[randrange(3, len(colores))])  # Obtengo un color aleatorio de 'colores'
 
-    ventana.ontimer(cambiar_colores, 250)
+    ventana.ontimer(cambiar_colores, 250)   # Pongo un timer para que dentro de 250 ms se vuelva a cambiar de color
 
+# Parametros que puede recibir el programa
 @click.command()
-@click.option('-i', '--iteraciones', required=True, type=click.IntRange(1, 10, clamp=True), help='Cantidad de iteraciones (1..10).')
-@click.option('-s', '--segmento', default=10, show_default=True, type=int, help='Longitud en px de cada segmento.')
-@click.option('-a', '--angulo', default=90, show_default=True, type=click.IntRange(1, 360, clamp=True), help='Angulo de cada giro (grados).')
-@click.option('-v', '--velocidad', default=6, show_default=True, type=click.IntRange(1, 11), help='Velocidad del dibujo. 1: muy lento, 11: muy rapido.')
-@click.option('-bg', '--background', default='white', show_default=True, type=click.Choice(colores), help='Color del fondo de la ventana.')
-@click.option('-pc', '--pencolor', default='black', show_default=True, type=click.Choice(colores), help='Color de la linea.')
-@click.option('-w', '--width', default=2, show_default=True, type=int, help='Grosor de la linea (px).')
-@click.option('-o', '--ocultar', is_flag=True, help='Indica si desea mostrar el cursor mientras va dibujando')
-@click.option('-sh', '--shape', default='arrow', show_default=True, type=click.Choice(shapes), help='Forma del cursor.')
-@click.option('-t', '--tracer', default=1, show_default=True, type=click.IntRange(1, 5, clamp=True), help='Periodo de actualizacion de pantalla.')
-@click.option('-ci', '--cadena-inicial', default='X', show_default=True, help='Cadena inicial.')
-@click.option('-c', '--mostrar-cadena', is_flag=True, help='Indica que desea mostrar la cadena generada')
-@click.option('-h', '--screen-size', default=2000, type=click.IntRange(500, 10000), help='Tamano de la hoja (NxN).')
-@click.option('-ws', '--window-size', default=0.8, type=click.FloatRange(0.1, 1.0), help='Tamano de la ventana, en proporcion a la pantalla (%).')
-@click.option('-pi', '--posicion-inicial', default=-400, type=click.INT, help='Posicion inicial del dibujo (0 es el centro de la hoja).')
-@click.option('-r', '--rainbow', is_flag=True, help='La linea alterna entre los distintos colores')
+@click.option('-i', '--iteraciones', 
+                required=True, 
+                type=click.IntRange(1, 10, clamp=True), 
+                help='Cantidad de iteraciones (1..10).')
 
-def programa(iteraciones, segmento, angulo, velocidad, background, pencolor, width, ocultar, shape, tracer, cadena_inicial, mostrar_cadena, screen_size, window_size, posicion_inicial, rainbow):
+@click.option('-s', '--segmento', 
+                default=10, 
+                show_default=True, 
+                type=int, 
+                help='Longitud en px de cada segmento.')
+
+@click.option('-a', '--angulo', 
+                default=90, 
+                show_default=True, 
+                type=click.IntRange(1, 360, clamp=True), 
+                help='Angulo de cada giro (grados).')
+
+@click.option('-v', '--velocidad', 
+                default=6, 
+                show_default=True, 
+                type=click.IntRange(1, 11), 
+                help='Velocidad del dibujo. 1: muy lento, 11: muy rapido.')
+
+@click.option('-bg', '--background',
+                default='white', 
+                show_default=True, 
+                type=click.Choice(colores), 
+                help='Color del fondo de la ventana.')
+
+@click.option('-pc', '--pencolor',
+                default='black', 
+                show_default=True, 
+                type=click.Choice(colores), 
+                help='Color de la linea.')
+
+@click.option('-w', '--width', 
+                default=2, 
+                show_default=True, 
+                type=int, 
+                help='Grosor de la linea (px).')
+
+@click.option('-o', '--ocultar', 
+                is_flag=True, 
+                help='Indica si desea mostrar el cursor mientras va dibujando')
+
+@click.option('-sh', '--shape',
+                default='arrow', 
+                show_default=True, 
+                type=click.Choice(shapes), 
+                help='Forma del cursor.')
+
+@click.option('-t', '--tracer', 
+                default=1, 
+                show_default=True, 
+                type=click.IntRange(1, 5, clamp=True), 
+                help='Periodo de actualizacion de pantalla.')
+
+@click.option('-ci', '--cadena-inicial', 
+                default='X', 
+                show_default=True, 
+                help='Cadena inicial.')
+
+@click.option('-c', '--mostrar-cadena', 
+                is_flag=True, 
+                help='Indica que desea mostrar la cadena generada')
+
+@click.option('-h', '--screen-size', 
+                default=2000, 
+                type=click.IntRange(500, 10000), 
+                help='Tamano de la hoja (NxN).')
+
+@click.option('-ws', '--window-size', 
+                default=0.8, 
+                type=click.FloatRange(0.1, 1.0), 
+                help='Tamano de la ventana, en proporcion a la pantalla (%). Ej: -ws 0.8 -> 80%')
+
+@click.option('-pi', '--posicion-inicial', 
+                default=0, 
+                type=click.INT, 
+                help='Posicion inicial del dibujo. Ej: -pi 100 -> (100, 100)')
+
+@click.option('-r', '--rainbow', 
+                is_flag=True, 
+                help='La linea alterna entre los distintos colores')
+
+def programa(iteraciones, segmento, angulo, velocidad, background, pencolor, width, ocultar, 
+            shape, tracer, cadena_inicial, mostrar_cadena, screen_size, window_size, 
+            posicion_inicial, rainbow):
     print('''Parametros de ejecucion: 
     -> Cantidad de iteraciones: {}
     -> Longitud de segmento: {} px
@@ -142,11 +212,11 @@ def programa(iteraciones, segmento, angulo, velocidad, background, pencolor, wid
         cadena = procesarCadena(cadena)
 
     if mostrar_cadena:
-        input('\nPresione una tecla para mostrar la cadena.')
+        input('\nPresione ENTER para mostrar la cadena.')
         print(cadena)
 
     # Creo una ventana y una tortuga
-    input('\nPresione una tecla para comenzar a dibujar.')
+    input('\nPresione ENTER para comenzar a dibujar.\n')
     ventana = turtle.Screen()
     ventana.title('Curva de Hilbert')
     ventana.setup(window_size, window_size)
@@ -178,8 +248,13 @@ def programa(iteraciones, segmento, angulo, velocidad, background, pencolor, wid
     tortuga.shape(shape)
     ventana.tracer(tracer)
 
-    dibujar(cadena, tortuga, segmento, angulo)
-    turtle.done()
+    try:
+        dibujar(cadena, tortuga, segmento, angulo)
+        turtle.done()
+    except:
+        print('Se ha interrumpido el dibujo.')
+    finally:
+        print('Fin del programa.')
 
 if __name__ == '__main__':
     programa()
